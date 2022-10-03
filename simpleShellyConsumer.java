@@ -1,11 +1,13 @@
 package it.centro.iot.shelly.mqtt;
 
+import it.centro.iot.shelly.mqtt.jdbc.DBManager;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.UUID;
 
 /**
@@ -18,11 +20,11 @@ public class simpleShellyConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(simpleShellyConsumer.class);
 
-    private static final String BROKER_ADDRESS = "your_broker_ip_address";
+    private static final String BROKER_ADDRESS = "192.168.10.19";
 
     private static final int BROKER_PORT = 1883;
 
-    private static final String SHELLY_ID = "your_device_id";
+    private static final String SHELLY_ID = "E09806A9D61F";
 
     private static final String SHELLY_MOD = "shelly1pm";
 
@@ -33,7 +35,7 @@ public class simpleShellyConsumer {
 
         logger.info("MQTT Consumer Started ...");
 
-        try{
+        try {
 
             //Generate a random MQTT client ID
             String clientId = UUID.randomUUID().toString();
@@ -57,13 +59,35 @@ public class simpleShellyConsumer {
 
             logger.info("Connected ! Client ID: {}", clientId);
 
+            DBManager db = new DBManager(DBManager.JDBC_Driver_SQLite, DBManager.JDBCURLSQLite);
+
+            initSQLite(db);
+
             client.subscribe(TOPIC, (t, msg) -> {
-                byte[] paload = msg.getPayload();
-                logger.info("Message Received ({}) Message Received: {}", t, new String(paload));
+                byte[] payload = msg.getPayload();
+                logger.info("Message Received ({}) Message Received: {}", t, new String(payload));
+                db.executeUpdate(String.format("INSERT INTO switch(measurement) VALUES(%s)", new String(payload)));
             });
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private static void initSQLite(DBManager db) throws SQLException {
+
+        try {
+
+            db.executeQuery("SELECT * FROM switch LIMIT 1");
+
+        } catch (SQLException e) {
+            db.executeUpdate("DROP TABLE IF EXISTS switch");
+            db.executeUpdate(
+                    "CREATE TABLE switch (" + "measurement_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                            + "Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, " + "measurement VARCHAR(30))");
+        }
+    }
 }
+
+
+

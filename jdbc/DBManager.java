@@ -17,8 +17,8 @@ public class DBManager {
     public static final String JDBC_Driver_SQLite = "org.sqlite.JDBC";
     public static final String JDBCURLSQLite = "jdbc:sqlite:test.db";
 
-    public static final String JDBCDriverMySQL = "com.mysql.jdbc.Driver";
-    public static final String JDBCURLMySQL = "jdbc:mysql://localhost:3306/jdbc_schema?user=riccardo&password=olacico&serverTimezone=" ;
+    public static final String JDBCDriverMySQL = "com.mysql.cj.jdbc.Driver";
+    public static final String JDBCURLMySQL = "jdbc:mysql://<your_ip>:3306/<db_name>?user=<utente>&password=<password>" ;
 
     protected Statement statement;
     protected Connection connection;

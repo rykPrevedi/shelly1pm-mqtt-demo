@@ -59,7 +59,8 @@ public class simpleShellyConsumer {
 
             logger.info("Connected ! Client ID: {}", clientId);
 
-            DBManager db = new DBManager(DBManager.JDBC_Driver_SQLite, DBManager.JDBCURLSQLite);
+            //DBManager db = new DBManager(DBManager.JDBC_Driver_SQLite, DBManager.JDBCURLSQLite);
+            DBManager db = new DBManager(DBManager.JDBCDriverMySQL, DBManager.JDBCURLMySQL);
 
             initSQLite(db);
 

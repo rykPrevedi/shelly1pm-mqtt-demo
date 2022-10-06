@@ -20,13 +20,13 @@ public class simpleShellyConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(simpleShellyConsumer.class);
 
-    private static final String BROKER_ADDRESS = "192.168.10.19";
+    private static final String BROKER_ADDRESS = "your_broker_ip_address";
 
     private static final int BROKER_PORT = 1883;
 
-    private static final String SHELLY_ID = "E09806A9D61F";
+    private static final String SHELLY_ID = "your_shelly_ID";
 
-    private static final String SHELLY_MOD = "shelly1pm";
+    private static final String SHELLY_MOD = "your_shelly_model";
 
     //E.g.: shellies/<model>-<deviceid>/relay/0/power reports instantaneous power in Watts
     private static final String TOPIC = String.format("shellies/%s-%s/relay/0/power", SHELLY_MOD, SHELLY_ID);
@@ -66,7 +66,7 @@ public class simpleShellyConsumer {
 
             client.subscribe(TOPIC, (t, msg) -> {
                 byte[] payload = msg.getPayload();
-                logger.info("Message Received ({}) Message Received: {}", t, new String(payload));
+                //logger.info("Message Received ({}) Message Received: {}", t, new String(payload));
                 db.executeUpdate(String.format("INSERT INTO switch(measurement) VALUES(%s)", new String(payload)));
             });
 

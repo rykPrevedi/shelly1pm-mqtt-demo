@@ -6,8 +6,6 @@ The power consumption by any devices connected to the switch are loaded on a SQL
 # Running with Maven dependencies
 
 The EXECUTABLE .jar file with dependencies can be automatically generated with an IDE. 
-Below is a video tutorial to do it with IntelliJ:
-https://www.youtube.com/watch?v=870XIYMrlSo
+Below is a video tutorial to do it with IntelliJ -> https://www.youtube.com/watch?v=870XIYMrlSo
 
-Command from terminal:
-mvn exec:java -Dexec.mainClass"simpleShellyConsumer"
+Command from terminal -> mvn exec:java -Dexec.mainClass"simpleShellyConsumer"
